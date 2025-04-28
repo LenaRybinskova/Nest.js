@@ -3,15 +3,10 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsPositive,
   IsString,
-  IsUrl,
-  IsUUID,
   Length,
-  Matches,
-  MinLength,
 } from 'class-validator';
 import { StartWith } from 'src/common/decorators/start-with-decoraor';
 
