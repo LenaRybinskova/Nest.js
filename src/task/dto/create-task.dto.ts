@@ -13,6 +13,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { StartWith } from 'src/common/decorators/start-with-decoraor';
 
 export enum TaskTag {
   'WORK' = 'work',
@@ -27,6 +28,8 @@ export class CreateTaskDto {
   //@MinLength(2)
   //@MaxLength(10)
   @Length(2, 10)
+  // КАСТОМНЫЙ ДЕКОРАТОР ДЛЯ ВАЛИДАЦИИ
+  @StartWith('Task')
   title: string;
 
   @IsOptional()
@@ -48,7 +51,7 @@ export class CreateTaskDto {
   // tags: string[];
   tags: TaskTag;
 
-  //РЕГУЛЯРКИ можно использовать
+  /*//РЕГУЛЯРКИ можно использовать
   @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/, {
     message: 'Пароль должен содержать цифры, буквы  и тд',
   })
@@ -70,5 +73,5 @@ export class CreateTaskDto {
   websiteURL: string;
 
   @IsUUID('4') // 4 самая частоиспользуемая uuid версия. если у ИД на 13 месте тостоит 4 значит это 4 версия
-  userId: string;
+  userId: string;*/
 }
