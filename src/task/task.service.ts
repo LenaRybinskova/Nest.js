@@ -24,10 +24,14 @@ export class TaskService {
   }
 
   create(dto: CreateTaskDto) {
+    const { title, description, priority, tags } = dto;
     const newTask = {
       id: this.tasks.length + 1,
-      title: dto.title,
+      title: title,
       isCompleted: false,
+      description: description,
+      priority: priority,
+      tags: tags,
     };
     this.tasks.push(newTask);
     //return true; можно вернуть либо тру, либо весь массив тасок с добавленной
@@ -36,7 +40,7 @@ export class TaskService {
 
   update(id: number, dto: UpdateTaskDto) {
     const { title, isCompleted } = dto;
-    const task = this.findById(id); //нашли таску и перезаписали поля
+    const task = this.findById(id);
     task.title = title;
     task.isCompleted = isCompleted;
 
