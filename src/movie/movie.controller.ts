@@ -6,8 +6,9 @@ import {
   Query,
   Headers,
   Req,
+  Res, Param,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
@@ -50,5 +51,16 @@ export class MovieController {
   @Get('request')
   getRequestDetails(@Req() req: Request) {
     return { method: req.method }; // если вернуть чисто req то будет 500 ошибка..это связ с серилизацией сложного объекта req, надо всегда вытягивать конкретные поля
+  }
+
+  // кастомный ответ, например для редиректа
+  @Get('response')
+  getResponse(@Res() res: Response) {
+    res.status(201).json({ message: 'OK' });
+  }
+
+  @Get(':idTL/details/:idTask')
+  getTask(@Param('idTL') idTL: string, @Param('idTask') idTask: string) {
+    return `данные из Урла ${idTL} и ${idTask}`;
   }
 }
