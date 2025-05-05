@@ -6,9 +6,12 @@ import {
   Query,
   Headers,
   Req,
-  Res, Param,
+  Res,
+  Param, Put, Delete,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { MovieService } from 'src/movie/movie.service';
+import { MovieDTO } from 'src/movie/dto/movie.dto';
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
@@ -17,11 +20,11 @@ import { Request, Response } from 'express';
 
 @Controller('movie')
 export class MovieController {
-  // если 1 парам надо вытащить
-  /*@Get()
+  /*// если 1 парам надо вытащить
+  /!*@Get()
   findAll(@Query("genre") genre:string){
     return  genre ?`Фильмы в жанре ${genre}`: [{ title: 'lll' }, { title: 'nnn' }]
-  }*/
+  }*!/
 
   // если несколько парам надо вытащить
   @Get()
@@ -62,5 +65,31 @@ export class MovieController {
   @Get(':idTL/details/:idTask')
   getTask(@Param('idTL') idTL: string, @Param('idTask') idTask: string) {
     return `данные из Урла ${idTL} и ${idTask}`;
+  }*/
+  constructor(private readonly movieService: MovieService) {}
+
+  @Get()
+  findAll() {
+    return this.movieService.findAll();
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: number) {
+    return this.movieService.findById(+id);
+  }
+
+  @Post()
+  create(@Body() dto: MovieDTO) {
+    return this.movieService.create(dto);
+  }
+
+  @Put(':id')
+  updateMovie(@Param('id') id: number, @Body() dto: MovieDTO) {
+    return this.movieService.updateMovie(+id, dto);
+  }
+
+  @Delete(':id')
+  deleteMovie(@Param('id') id: number) {
+    return this.movieService.deleteMovie(+id);
   }
 }
