@@ -7,7 +7,9 @@ import {
   Headers,
   Req,
   Res,
-  Param, Put, Delete,
+  Param,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { MovieService } from 'src/movie/movie.service';
@@ -39,7 +41,7 @@ export class MovieController {
   }
 
   // вытащить ВСЕ хедерс
-  @Get('headers')
+  @Get('headersPage')
   getHead(@Headers() headers: any) {
     return headers;
   }
@@ -74,8 +76,8 @@ export class MovieController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: number) {
-    return this.movieService.findById(+id);
+  findById(@Param('id') id: string) {
+    return this.movieService.findById(id);
   }
 
   @Post()
@@ -84,12 +86,12 @@ export class MovieController {
   }
 
   @Put(':id')
-  updateMovie(@Param('id') id: number, @Body() dto: MovieDTO) {
-    return this.movieService.updateMovie(+id, dto);
+  updateMovie(@Param('id') id: string, @Body() dto: MovieDTO) {
+    return this.movieService.updateMovie(id, dto);
   }
 
   @Delete(':id')
-  deleteMovie(@Param('id') id: number) {
-    return this.movieService.deleteMovie(+id);
+  deleteMovie(@Param('id') id: string) {
+    return this.movieService.deleteMovie(id);
   }
 }

@@ -13,12 +13,11 @@ export class MovieService {
   constructor(
     @InjectRepository(MovieEntity)
     private readonly movieRepository: Repository<MovieEntity>,
-  ) {
-  }
+  ) {}
 
   async findAll(): Promise<MovieEntity[]> {
     return await this.movieRepository.find({
-      where: { isPublic: false }, //условие
+      where: { isAvailable: false }, //условие
       order: {
         //упорядочить по столбцу
         createdAt: 'desc',
@@ -33,7 +32,7 @@ export class MovieService {
     });
   }
 
-  async findById(id: number): Promise<MovieEntity> {
+  async findById(id: string): Promise<MovieEntity> {
     const movie = await this.movieRepository.findOne({
       where: { id: id },
     });
@@ -48,14 +47,14 @@ export class MovieService {
     return await this.movieRepository.save(movie);
   }
 
-  async updateMovie(id: number, dto: MovieDTO): Promise<boolean> {
+  async updateMovie(id: string, dto: MovieDTO): Promise<boolean> {
     const movie = await this.findById(id);
     Object.assign(movie, dto);
     await this.movieRepository.save(movie);
     return true;
   }
 
-  async deleteMovie(id: number): Promise<number> {
+  async deleteMovie(id: string): Promise<string> {
     const movie = await this.findById(id);
     await this.movieRepository.remove(movie);
     return movie.id;
