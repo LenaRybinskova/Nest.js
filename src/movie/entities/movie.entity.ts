@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   PrimaryColumn,
   Generated,
+  OneToMany,
 } from 'typeorm';
+import { ReviewEntity } from 'src/review/entity/review.entity';
 
 export enum Genre {
   ACTION = 'action',
@@ -17,9 +19,7 @@ export enum Genre {
 
 @Entity({ name: 'movie' })
 export class MovieEntity {
-  /*  @PrimaryGeneratedColumn() //генерирует автом ИД*/
-  @PrimaryColumn()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid') //генерирует автом ИД
   id: string;
 
   @Column({ type: 'varchar', length: 128 }) //varchar значит текст поле
@@ -42,6 +42,11 @@ export class MovieEntity {
 
   @Column({ type: 'date', nullable: true, name: 'release_date' })
   releaseDate: string;
+
+  @OneToMany(() => ReviewEntity, (review) => review.movie, {
+    onDelete: 'CASCADE',
+  })
+  reviews: ReviewEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
