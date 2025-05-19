@@ -1,24 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 
 type Item = {
-  id: string;
-  date: string;
-};
+  id: string
+  date: string
+}
 
 type Items = {
-  [key: string]: Item;
-};
+  [key: string]: Item
+}
 
 @Injectable()
 export class ItemsService {
-  private items: Items = plants;
+  private items: Items = plants
 
   getAllItems(): Item[] {
-    return Object.values(this.items);
+    return Object.values(this.items)
   }
 
   addItem(item: Item): void {
-    this.items[item.id] = item;
+    this.items[item.id] = item
   }
 }
 
@@ -27,4 +27,4 @@ const plants: Items = {
     id: '111',
     date: '21.04.2025',
   },
-};
+}

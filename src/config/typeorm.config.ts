@@ -1,5 +1,5 @@
-import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config'
+import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 
 export async function getTypeOrmConfig(
   configService: ConfigService,
@@ -13,5 +13,5 @@ export async function getTypeOrmConfig(
     database: configService.getOrThrow<string>('POSTGRES_DB'),
     autoLoadEntities: true,
     synchronize: true,
-  };
+  }
 }

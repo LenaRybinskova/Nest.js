@@ -1,8 +1,9 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MovieEntity } from 'src/movie/entities/movie.entity';
-import { Repository } from 'typeorm';
-import { MovieDTO } from 'src/movie/dto/movie.dto';
+import { Body, Injectable, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { MovieEntity } from 'src/movie/entities/movie.entity'
+import { In, Repository } from 'typeorm'
+import { MovieDTO } from 'src/movie/dto/movie.dto'
+import { ActorEntity } from 'src/actor/entities/actor.entities'
 
 @Injectable()
 export class MovieService {
@@ -13,6 +14,8 @@ export class MovieService {
   constructor(
     @InjectRepository(MovieEntity)
     private readonly movieRepository: Repository<MovieEntity>,
+    @InjectRepository(ActorEntity)
+    private readonly actorRepository: Repository<ActorEntity>,
   ) {}
 
   async findAll(): Promise<MovieEntity[]> {
@@ -29,34 +32,46 @@ export class MovieService {
         title: true,
         releaseYear: true,
       },
-    });
+    })
   }
 
   async findById(id: string): Promise<MovieEntity> {
     const movie = await this.movieRepository.findOne({
       where: { id: id },
-    });
+    })
     if (!movie) {
-      throw new NotFoundException('Фильм не найден');
+      throw new NotFoundException('Фильм не найден')
     }
-    return movie;
+    return movie
   }
 
+  //создаем актера, предаем с фронта:title, releaseYear, actorsIds
   async create(dto: MovieDTO): Promise<MovieEntity> {
-    const movie = this.movieRepository.create(dto); //создали в БД
-    return await this.movieRepository.save(movie);
+    const { releaseYear, title, actorsIds } = dto
+
+    const actors = await this.actorRepository.find({
+      where: {
+        id: In(actorsIds),
+      },
+    })
+
+    if (!actors || !actors.length)
+      throw new NotFoundException('Один или несколько актеров не найдены')
+
+    const movie = this.movieRepository.create({ title, releaseYear, actors })
+    return await this.movieRepository.save(movie)
   }
 
   async updateMovie(id: string, dto: MovieDTO): Promise<boolean> {
-    const movie = await this.findById(id);
-    Object.assign(movie, dto);
-    await this.movieRepository.save(movie);
-    return true;
+    const movie = await this.findById(id)
+    Object.assign(movie, dto)
+    await this.movieRepository.save(movie)
+    return true
   }
 
   async deleteMovie(id: string): Promise<string> {
-    const movie = await this.findById(id);
-    await this.movieRepository.remove(movie);
-    return movie.id;
+    const movie = await this.findById(id)
+    await this.movieRepository.remove(movie)
+    return movie.id
   }
 }

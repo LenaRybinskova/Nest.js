@@ -10,10 +10,10 @@ import {
   Param,
   Put,
   Delete,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
-import { MovieService } from 'src/movie/movie.service';
-import { MovieDTO } from 'src/movie/dto/movie.dto';
+} from '@nestjs/common'
+import { Request, Response } from 'express'
+import { MovieService } from 'src/movie/movie.service'
+import { MovieDTO } from 'src/movie/dto/movie.dto'
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
@@ -72,26 +72,26 @@ export class MovieController {
 
   @Get()
   findAll() {
-    return this.movieService.findAll();
+    return this.movieService.findAll()
   }
 
   @Get(':id')
   findById(@Param('id') id: string) {
-    return this.movieService.findById(id);
+    return this.movieService.findById(id)
   }
 
   @Post()
   create(@Body() dto: MovieDTO) {
-    return this.movieService.create(dto);
+    return this.movieService.create(dto)
   }
 
   @Put(':id')
   updateMovie(@Param('id') id: string, @Body() dto: MovieDTO) {
-    return this.movieService.updateMovie(id, dto);
+    return this.movieService.updateMovie(id, dto)
   }
 
   @Delete(':id')
   deleteMovie(@Param('id') id: string) {
-    return this.movieService.deleteMovie(id);
+    return this.movieService.deleteMovie(id)
   }
 }

@@ -7,8 +7,8 @@ import {
   IsPositive,
   IsString,
   Length,
-} from 'class-validator';
-import { StartWith } from 'src/common/decorators/start-with-decoraor';
+} from 'class-validator'
+import { StartWith } from 'src/common/decorators/start-with-decoraor'
 
 export enum TaskTag {
   'WORK' = 'work',
@@ -25,18 +25,18 @@ export class CreateTaskDto {
   @Length(2, 10)
   // КАСТОМНЫЙ ДЕКОРАТОР ДЛЯ ВАЛИДАЦИИ
   @StartWith('Task')
-  title: string;
+  title: string
 
   @IsOptional()
   @IsString({ message: 'Мое сообщение, название должно быть строкой' })
-  description: string;
+  description: string
 
   //ЧИСЛА
   /*  @IsNumber({}, { message: 'Приоритет должен быть числом' })*/ // число
   @IsInt({ message: 'Приоритет должен быть числом' }) // целочисленное
   @IsOptional() // не обязатальный паарметр
   @IsPositive({ message: 'Число должно быть больше 0' }) // число больше 0
-  priority: number; // приоритет таски
+  priority: number // приоритет таски
 
   //МАССИВЫ СТРОК, ЕНАМ
   @IsArray({ message: 'Теги должны быть массивом.', each: true })
@@ -44,7 +44,7 @@ export class CreateTaskDto {
   @IsEnum(TaskTag, { message: 'Недопустимое значение тега' })
   @IsOptional()
   // tags: string[];
-  tags: TaskTag;
+  tags: TaskTag
 
   /*//РЕГУЛЯРКИ можно использовать
   @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$/, {

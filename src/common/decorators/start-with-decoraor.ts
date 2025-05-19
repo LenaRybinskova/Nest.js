@@ -2,7 +2,7 @@ import {
   registerDecorator,
   ValidationOptions,
   ValidationArguments,
-} from 'class-validator';
+} from 'class-validator'
 
 // StartWith это декоратор, а декоратор это функ высш порядка, она возвр другую функцию.
 export function StartWith(
@@ -18,12 +18,12 @@ export function StartWith(
       validator: {
         validate(value: any, args: ValidationArguments) {
           // Проверка на тип данных и начало строки с заданного префикса
-          return typeof value === 'string' && value.startsWith(prefix);
+          return typeof value === 'string' && value.startsWith(prefix)
         },
         defaultMessage(args: ValidationArguments) {
-          return `название должно начинаться с ${prefix}`;
+          return `название должно начинаться с ${prefix}`
         },
       },
-    });
-  };
+    })
+  }
 }

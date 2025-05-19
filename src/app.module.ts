@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { MovieModule } from './movie/movie.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { getTypeOrmConfig } from 'src/config/typeorm.config';
-import { ReviewModule } from 'src/review/review.module';
+import { Module } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { MovieModule } from './movie/movie.module'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { getTypeOrmConfig } from 'src/config/typeorm.config'
+import { ReviewModule } from 'src/review/review.module'
+import { ActorModule } from './actor/actor.module'
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ReviewModule } from 'src/review/review.module';
     }),
     MovieModule,
     ReviewModule,
+    ActorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
