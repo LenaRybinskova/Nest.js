@@ -1,4 +1,4 @@
 export class UpdateTaskDto {
-  title: string;
-  isCompleted: boolean;
+  title: string
+  isCompleted: boolean
 }
