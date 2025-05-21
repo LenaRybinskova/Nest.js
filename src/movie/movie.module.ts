@@ -4,9 +4,12 @@ import { MovieController } from './movie.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { MovieEntity } from 'src/movie/entities/movie.entity'
 import { ActorEntity } from 'src/actor/entities/actor.entities'
+import { MoviePosterEntity } from 'src/movie/entities/poster.entity'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MovieEntity, ActorEntity])],
+  imports: [
+    TypeOrmModule.forFeature([MovieEntity, ActorEntity, MoviePosterEntity]),
+  ], // тут все сущности с которыми есть связь
   controllers: [MovieController],
   providers: [MovieService],
   exports: [MovieService], // MovieService будет доступен всем др модулям в том же экземпляре, они его черех imports должны покдлючить

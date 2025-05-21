@@ -4,6 +4,7 @@ import { MovieEntity } from 'src/movie/entities/movie.entity'
 import { In, Repository } from 'typeorm'
 import { MovieDTO } from 'src/movie/dto/movie.dto'
 import { ActorEntity } from 'src/actor/entities/actor.entities'
+import { MoviePosterEntity } from 'src/movie/entities/poster.entity'
 
 @Injectable()
 export class MovieService {
@@ -16,6 +17,8 @@ export class MovieService {
     private readonly movieRepository: Repository<MovieEntity>,
     @InjectRepository(ActorEntity)
     private readonly actorRepository: Repository<ActorEntity>,
+    @InjectRepository(MoviePosterEntity)
+    private readonly posterRepository: Repository<MoviePosterEntity>,
   ) {}
 
   async findAll(): Promise<MovieEntity[]> {
@@ -38,6 +41,7 @@ export class MovieService {
   async findById(id: string): Promise<MovieEntity> {
     const movie = await this.movieRepository.findOne({
       where: { id: id },
+      relations: ['actors'],
     })
     if (!movie) {
       throw new NotFoundException('Фильм не найден')
@@ -47,18 +51,30 @@ export class MovieService {
 
   //создаем актера, предаем с фронта:title, releaseYear, actorsIds
   async create(dto: MovieDTO): Promise<MovieEntity> {
-    const { releaseYear, title, actorsIds } = dto
+    const { releaseYear, title, actorsIds, posterUrl } = dto
 
+    //нашли конкр актеров в Сущности Актеров
     const actors = await this.actorRepository.find({
       where: {
         id: In(actorsIds),
       },
     })
 
+    //если в запросе передали постерУРЛ, то создаепм запись в сущность Постер
+    let poster: MoviePosterEntity | null = null //по федолту будет
+    if (posterUrl) {
+      poster = this.posterRepository.create({ url: posterUrl })
+      await this.posterRepository.save(poster)
+    }
     if (!actors || !actors.length)
       throw new NotFoundException('Один или несколько актеров не найдены')
 
-    const movie = this.movieRepository.create({ title, releaseYear, actors })
+    const movie = this.movieRepository.create({
+      title,
+      releaseYear,
+      poster,
+      actors,
+    })
     return await this.movieRepository.save(movie)
   }
 

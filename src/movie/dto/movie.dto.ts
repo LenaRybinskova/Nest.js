@@ -23,4 +23,7 @@ export class MovieDTO {
   @IsArray()
   @IsUUID('4', { each: true })
   actorsIds: string[]
+
+  @IsString()
+  posterUrl: string
 }
