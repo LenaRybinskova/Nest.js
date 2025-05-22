@@ -1,19 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Headers,
-  Req,
-  Res,
-  Param,
-  Put,
-  Delete,
-} from '@nestjs/common'
-import { Request, Response } from 'express'
-import { MovieService } from 'src/movie/movie.service'
-import { MovieDTO } from 'src/movie/dto/movie.dto'
+import { Controller } from '@nestjs/common';
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
@@ -22,7 +7,7 @@ import { MovieDTO } from 'src/movie/dto/movie.dto'
 
 @Controller('movie')
 export class MovieController {
-  /*// если 1 парам надо вытащить
+  /*/!*!// если 1 парам надо вытащить
   /!*@Get()
   findAll(@Query("genre") genre:string){
     return  genre ?`Фильмы в жанре ${genre}`: [{ title: 'lll' }, { title: 'nnn' }]
@@ -67,7 +52,7 @@ export class MovieController {
   @Get(':idTL/details/:idTask')
   getTask(@Param('idTL') idTL: string, @Param('idTask') idTask: string) {
     return `данные из Урла ${idTL} и ${idTask}`;
-  }*/
+  }*!/
   constructor(private readonly movieService: MovieService) {}
 
   @Get()
@@ -93,5 +78,5 @@ export class MovieController {
   @Delete(':id')
   deleteMovie(@Param('id') id: string) {
     return this.movieService.deleteMovie(id)
-  }
+  }*/
 }

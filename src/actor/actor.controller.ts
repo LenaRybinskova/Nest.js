@@ -6,8 +6,8 @@ import { CreateActorDto } from 'src/actor/dto/create-actor.dto'
 export class ActorController {
   constructor(private readonly actorService: ActorService) {}
 
-  @Post()
+  /*@Post()
   create(@Body() dto: CreateActorDto) {
     return this.actorService.createActor(dto)
-  }
+  }*/
 }
