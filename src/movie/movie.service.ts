@@ -1,14 +1,8 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { MovieEntity } from 'src/movie/entities/movie.entity'
-import { In, Repository } from 'typeorm'
-import { MovieDTO } from 'src/movie/dto/movie.dto'
-import { ActorEntity } from 'src/actor/entities/actor.entities'
-import { MoviePosterEntity } from 'src/movie/entities/poster.entity'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class MovieService {
-  // в конструкторе создается переменная доступная тольков этом класссе movieRepository
+  /*  // в конструкторе создается переменная доступная тольков этом класссе movieRepository
   // и в нее кладем Repository<MovieEntity> - это инструмент чтобы обращаться к сущности( таблице) MovieEntity
   // объект Repository предост методы для работы с таблицей: ind, save, delete
 
@@ -86,8 +80,9 @@ export class MovieService {
   }
 
   async deleteMovie(id: string): Promise<string> {
-    const movie = await this.findById(id)
-    await this.movieRepository.remove(movie)
-    return movie.id
+    const movie = await this.findById(id);
+    await this.movieRepository.remove(movie);
+    return movie.id;
   }
+  */
 }
