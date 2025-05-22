@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller } from '@nestjs/common'
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')

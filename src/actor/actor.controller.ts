@@ -1,6 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Controller } from '@nestjs/common'
 import { ActorService } from './actor.service'
-import { CreateActorDto } from 'src/actor/dto/create-actor.dto'
 
 @Controller('actor')
 export class ActorController {
