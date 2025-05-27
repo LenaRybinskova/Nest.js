@@ -2,7 +2,7 @@ import {
   IsArray,
   isArray,
   IsInt,
-  IsNotEmpty,
+  IsNotEmpty, IsOptional,
   IsString,
   IsUUID,
   Max,
@@ -10,7 +10,7 @@ import {
 } from 'class-validator'
 
 export class MovieDTO {
-  @IsNotEmpty()
+  @IsNotEmpty() //@IsNotEmpty() значит ОБЯЗАТЕЛЬНОЕ ПОЛЕ
   @IsString()
   title: string
 
@@ -20,10 +20,12 @@ export class MovieDTO {
   @Max(new Date().getFullYear()) // чтобы дату дальше текущей нельзя было указать
   releaseYear: number
 
+  @IsOptional()
   @IsArray()
   @IsUUID('4', { each: true })
   actorsIds: string[]
 
+  @IsOptional()
   @IsString()
   posterUrl: string
 }

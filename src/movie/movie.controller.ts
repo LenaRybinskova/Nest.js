@@ -1,4 +1,6 @@
-import { Controller } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common'
+import { MovieService } from 'src/movie/movie.service'
+import { MovieDTO } from 'src/movie/dto/movie.dto'
 
 /*@Controller({
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
@@ -7,6 +9,7 @@ import { Controller } from '@nestjs/common'
 
 @Controller('movie')
 export class MovieController {
+  // TYPEORM
   /*/!*!// если 1 парам надо вытащить
   /!*@Get()
   findAll(@Query("genre") genre:string){
@@ -79,4 +82,31 @@ export class MovieController {
   deleteMovie(@Param('id') id: string) {
     return this.movieService.deleteMovie(id)
   }*/
+
+  constructor(private readonly movieService: MovieService) {}
+
+  @Get()
+  getAll() {
+    return this.movieService.findAll()
+  }
+
+  @Post()
+  create(@Body() dto: MovieDTO) {
+    return this.movieService.create(dto)
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.movieService.findById(id)
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() dto: MovieDTO) {
+    return this.movieService.updateMovie(id, dto)
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.movieService.deleteMovie(id)
+  }
 }

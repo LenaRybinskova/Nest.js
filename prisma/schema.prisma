@@ -14,7 +14,7 @@ model Movie {
   description String? //? необязательный парам
   releaseYear Int
   reting      Float    @default(0.0) //@default(0.0) дефолтное значение
-  isAvailable Boolean  @default(false)
+  isAvailable Boolean  @default(false) // ignore - поле в табл будет, но через Призму работать с ним не получится
   genre       Genre    @default(COMEDY)
   createdAt   DateTime @default(now()) @map("created_at") //  @map("created_at") то как будет в БД поле называться
   updateAt    DateTime @updatedAt @map("updated_at") //@updatedAt спец декор для обновл строки
@@ -22,9 +22,10 @@ model Movie {
   review Review[]
   actor  Actor[]  @relation("movies_actors")
 
-  poster   MoviePoster @relation(fields: [posterId], references: [id])
-  posterId String      @unique @map("poster_id")
+  poster   MoviePoster? @relation(fields: [posterId], references: [id])
+  posterId String?      @unique @map("poster_id")
 
+  @@index([releaseYear, title]) // index чтобы поиск в сущн  был по этому полю быстрее, за счет того что он сразу фильтрует по этим полям
   @@map("movies") // @@map декор для назв самой таблицы
 }
 
