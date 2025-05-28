@@ -12,7 +12,6 @@ export class LoggingMiddleware implements NestMiddleware {
   }
 }*/
 
-
 // как функция. если подключаем в main.ts
 export function logger(req: Request, res: Response, next: NextFunction) {
   console.log(`Request: ${req.method} ${req.url}`)

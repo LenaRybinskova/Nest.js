@@ -18,13 +18,13 @@ export class ReviewService {
     return await this.reviewRepository.save(review)
   }*/
 
-  constructor(
-    private readonly prismaService: PrismaService,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createReview(dto: CreateReviewDto): Promise<Review> {
     const { movieId, text, rating } = dto
 
-    return  this.prismaService.review.create({ data: { text, rating, movie:{connect:{id:movieId}} } }) // в табл Ревью в колонку movie подставит movieId
+    return this.prismaService.review.create({
+      data: { text, rating, movie: { connect: { id: movieId } } },
+    }) // в табл Ревью в колонку movie подставит movieId
   }
 }

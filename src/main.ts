@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
 import { logger } from 'src/common/middlewares/logger.moddleware'
+import { AuthGuard } from 'src/common/guards/auth.guard'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -9,6 +10,7 @@ async function bootstrap() {
   //app.setGlobalPrefix('api');
 
   app.use(logger) //подкл функ логирования мидлвер
+  //app.useGlobalGuards(new AuthGuard) //подкл AuthGuard глобально
 
   await app.listen(3000)
 }
