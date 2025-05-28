@@ -106,6 +106,7 @@ export class MovieService {
             name: true,
           },
         },
+        review:true
       },
     })
   }
@@ -140,7 +141,7 @@ export class MovieService {
   async findById(id: string): Promise<Movie> {
     const movie = await this.prismaService.movie.findUnique({
       where: { id },
-      include: { actor: true, poster: true },
+      include: { actor: true, poster: true, review:true },
     })
 
     if (!movie) {
