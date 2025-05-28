@@ -6,7 +6,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Req, UsePipes,
 } from '@nestjs/common'
 import { MovieService } from 'src/movie/movie.service'
 import { MovieDTO } from 'src/movie/dto/movie.dto'
@@ -98,6 +98,7 @@ export class MovieController {
   getAll() {
     return this.movieService.findAll()
   }
+
 
   @Post()
   create(@Body() dto: MovieDTO) {
