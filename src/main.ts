@@ -3,6 +3,8 @@ import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
 import { logger } from 'src/common/middlewares/logger.moddleware'
 import { AuthGuard } from 'src/common/guards/auth.guard'
+import { ResponseInterseptor } from 'src/common/interseptors/response.interseptor'
+import { AllExeptionsFilter } from 'src/common/filters/all-exeptions.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -11,6 +13,8 @@ async function bootstrap() {
 
   app.use(logger) //подкл функ логирования мидлвер
   //app.useGlobalGuards(new AuthGuard) //подкл AuthGuard глобально
+  //app.useGlobalInterceptors(new ResponseInterseptor())
+  app.useGlobalFilters(new AllExeptionsFilter)
 
   await app.listen(3000)
 }
