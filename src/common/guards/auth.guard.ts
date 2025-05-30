@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common'
 import { Request } from 'Express'
 
-
 //Гард должен возвращать тру\фолс и пропускать или останавливать обр запроса.
 @Injectable()
 export class AuthGuard implements CanActivate {

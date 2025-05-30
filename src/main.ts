@@ -8,7 +8,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(new ValidationPipe()) // добавл для валидации всех запр
-  app.useGlobalFilters(new AllExeptionsFilter)
+  app.useGlobalFilters(new AllExeptionsFilter())
   app.use(logger) //подкл функ логирования мидлвер
   //app.setGlobalPrefix('api');
   //app.useGlobalGuards(new AuthGuard) //подкл AuthGuard глобально
