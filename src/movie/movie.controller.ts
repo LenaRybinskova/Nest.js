@@ -133,17 +133,17 @@ export class MovieController {
   @ApiOperation({
     summary: 'Создать фильм',
   })
-  @ApiBody({
+ /* @ApiBody({
     schema: {
       type: 'object',
       properties: {
-        title: { type: 'string', "Twin picks" },
+        title: { type: 'string', description:"Twin picks" },
         releaseYear: { type: 'number' },
         actorsIds: { type: 'array' },
         posterUrl: { type: 'string' },
       },
     },
-  })
+  })*/
   @Post()
   create(@Body() dto: MovieDTO) {
     return this.movieService.create(dto)
