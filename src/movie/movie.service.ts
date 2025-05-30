@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { MovieDTO } from 'src/movie/dto/movie.dto'
+import { CreateMovieRequest } from 'src/movie/dto/create-movie.request'
 import { Movie, MoviePoster } from '@prisma/client'
 
 @Injectable()
@@ -48,7 +48,7 @@ export class MovieService {
   }
 
   //создаем актера, предаем с фронта:title, releaseYear, actorsIds
-  async create(dto: MovieDTO): Promise<MovieEntity> {
+  async create(dto: CreateMovieDto): Promise<MovieEntity> {
     const { releaseYear, title, actorsIds, posterUrl } = dto
 
     //нашли конкр актеров в Сущности Актеров
@@ -76,7 +76,7 @@ export class MovieService {
     return await this.movieRepository.save(movie)
   }
 
-  async updateMovie(id: string, dto: MovieDTO): Promise<boolean> {
+  async updateMovie(id: string, dto: CreateMovieDto): Promise<boolean> {
     const movie = await this.findById(id)
     Object.assign(movie, dto)
     await this.movieRepository.save(movie)
@@ -111,7 +111,7 @@ export class MovieService {
     })
   }
 
-  async create(dto: MovieDTO): Promise<Movie> {
+  async create(dto: CreateMovieRequest): Promise<Movie> {
     const { actorsIds, releaseYear, title, posterUrl } = dto
     const actors = await this.prismaService.actor.findMany({
       where: { id: { in: actorsIds } },
@@ -151,7 +151,7 @@ export class MovieService {
     return movie
   }
 
-  async updateMovie(id: string, dto: MovieDTO): Promise<boolean> {
+  async updateMovie(id: string, dto: CreateMovieRequest): Promise<boolean> {
     const movie = await this.findById(id)
 
     const actors = await this.prismaService.actor.findMany({

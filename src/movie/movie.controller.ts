@@ -11,10 +11,15 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { MovieService } from 'src/movie/movie.service'
-import { MovieDTO } from 'src/movie/dto/movie.dto'
+import {
+  CreateMovieRequest,
+  MovieResponseDto,
+} from 'src/movie/dto/create-movie.request'
 import {
   ApiBody,
-  ApiHeader, ApiNotFoundResponse, ApiOkResponse,
+  ApiHeader,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -26,9 +31,6 @@ import {
   path: 'movie', // это тоже самое что мы так укажем @Controller('movie')
   host:"api.ru"  // откуда могут запросы приходить, напр с http://api.ru/movie
 })*/
-
-
-
 
 @ApiTags('Movies')
 @Controller('movie')
@@ -93,12 +95,12 @@ export class MovieController {
   }
 
   @Post()
-  create(@Body() dto: MovieDTO) {
+  create(@Body() dto: CreateMovieDto) {
     return this.movieService.create(dto)
   }
 
   @Put(':id')
-  updateMovie(@Param('id') id: string, @Body() dto: MovieDTO) {
+  updateMovie(@Param('id') id: string, @Body() dto: CreateMovieDto) {
     return this.movieService.updateMovie(id, dto)
   }
 
@@ -117,13 +119,25 @@ export class MovieController {
     return this.movieService.findAll()
   }
 
-  @ApiOperation({ summary: 'Получить фильм по ID', description: 'Возвращаем инфо о фильме', })
+  @ApiOperation({
+    summary: 'Получить фильм по ID',
+    description: 'Возвращаем инфо о фильме',
+  })
   @ApiParam({ name: 'id', type: 'string', description: 'ID фильма' })
   @ApiHeader({ name: 'X-Auth-Token', description: 'Токен авторизации' })
   @ApiQuery({ name: 'year', type: 'number', description: 'Фильтр по году' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Фильм найден' })
   //@ApiOkResponse({description: 'Фильм найден' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Фильм не найден swagger',example:{status:404,message:"Фильм не найден" , timestamp:"2222", path:"/movie/id"} }) //404
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Фильм не найден swagger',
+    example: {
+      status: 404,
+      message: 'Фильм не найден',
+      timestamp: '2222',
+      path: '/movie/id',
+    },
+  }) //404
   //@ApiNotFoundResponse({description: 'Фильм не найден swagger'}) //404
   @Get(':id')
   findById(@Param('id') id: string) {
@@ -133,7 +147,8 @@ export class MovieController {
   @ApiOperation({
     summary: 'Создать фильм',
   })
- /* @ApiBody({
+  @ApiOkResponse({ description: 'фильи создан ', type: [MovieResponseDto] })
+  /* @ApiBody({
     schema: {
       type: 'object',
       properties: {
@@ -145,12 +160,12 @@ export class MovieController {
     },
   })*/
   @Post()
-  create(@Body() dto: MovieDTO) {
+  create(@Body() dto: CreateMovieRequest) {
     return this.movieService.create(dto)
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: MovieDTO) {
+  update(@Param('id') id: string, @Body() dto: CreateMovieRequest) {
     return this.movieService.updateMovie(id, dto)
   }
 

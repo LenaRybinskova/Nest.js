@@ -1,6 +1,18 @@
-import { Controller, Get } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+} from '@nestjs/common'
 import { AppService } from './app.service'
 import { ApiTags } from '@nestjs/swagger'
+import { StringToLowercasePipe } from 'src/common/pipes/string-to-lowercase.pipe'
+import { UserAgent } from 'src/common/decorators/user-agent.decorator'
+import { ResponseInterseptor } from 'src/common/interseptors/response.interseptor'
+
 
 @ApiTags('App')
 @Controller()
@@ -12,14 +24,14 @@ export class AppController {
     return this.appService.getHello()
   }
 
-  /*  @UsePipes(StringToLowercasePipe)
+  @UsePipes(StringToLowercasePipe)
   @Post()
   create(@Body('title') title: string) {
     console.log('Movie: ', title)
   }
 
   //@UseFilters(AllExeptionsFilter)
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @UseInterceptors(ResponseInterseptor)
   @Get('@me')
   getProfile(@UserAgent() userAgent: string) {
@@ -29,5 +41,5 @@ export class AppController {
       email: 'support@mail.ru',
       userAgent,
     }
-  }*/
+  }
 }
