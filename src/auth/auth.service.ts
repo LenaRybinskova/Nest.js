@@ -1,10 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { RegisterRequest } from 'src/auth/dto/registerRequest'
-import { hash } from 'argon2'
+import { hash, verify } from 'argon2'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { JwtPayload } from 'src/auth/interfaces/jwt.interface'
+import { LoginRequest } from 'src/auth/dto/loginRequest'
 
 @Injectable()
 export class AuthService {
@@ -17,11 +22,11 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {
-    this.JWT_SECRET = configService.getOrThrow<string>('JWT_SECRET')
-    this.JWT_ACCESS_TOKEN_TTL = configService.getOrThrow<string>(
+    this.JWT_SECRET = this.configService.getOrThrow<string>('JWT_SECRET')
+    this.JWT_ACCESS_TOKEN_TTL = this.configService.getOrThrow<string>(
       'JWT_ACCESS_TOKEN_TTL',
     )
-    this.JWT_REFRESH_TOKEN_TTL = configService.getOrThrow<string>(
+    this.JWT_REFRESH_TOKEN_TTL = this.configService.getOrThrow<string>(
       'JWT_REFRESH_TOKEN_TTL',
     )
   }
@@ -49,14 +54,40 @@ export class AuthService {
   private generateTokens(id: string) {
     const payload: JwtPayload = { id } //на базе Ид будет создан Пейлод
 
-    const accessToken = this.jwtService.sign(payload, { //Nest генерит аксесс токен с таким сроком жзини
+    const accessToken = this.jwtService.sign(payload, {
+      //Nest генерит аксесс токен с таким сроком жзини
       expiresIn: this.JWT_ACCESS_TOKEN_TTL,
     })
 
-    const refreshToken = this.jwtService.sign(payload, { //Nest генерит рефреш токен с таким сроком жзини
+    const refreshToken = this.jwtService.sign(payload, {
+      //Nest генерит рефреш токен с таким сроком жзини
       expiresIn: this.JWT_REFRESH_TOKEN_TTL,
     })
 
-    return { accessToken, refreshToken}
+    return { accessToken, refreshToken }
+  }
+
+  async login(dto: LoginRequest) {
+    const { password, email } = dto
+
+    const existUser = await this.prismaService.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        password: true,
+      },
+    })
+
+    if (!existUser) {
+      throw new NotFoundException('Пользователь не зарегистрирован') //404
+    }
+
+    const isValidPassword = await verify(existUser.password, password)
+
+    if (!isValidPassword) {
+      throw new NotFoundException('Пользователь не зарегистрирован') //404
+    }
+
+    return this.generateTokens(existUser.id)
   }
 }

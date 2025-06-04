@@ -2,13 +2,15 @@ import { ConfigService } from '@nestjs/config'
 import type { JwtModuleOptions } from '@nestjs/jwt'
 
 // getJWTConfig просто получает переменную JWT_SECRET из .env (через ConfigService
-export async function getJWTConfig(configService: ConfigService): Promise<JwtModuleOptions> {
+export async function getJWTConfig(
+  configService: ConfigService,
+): Promise<JwtModuleOptions> {
   return {
     secret: configService.getOrThrow<string>('JWT_SECRET'),
     signOptions: { algorithm: 'HS256' },
   }
 }
- // Сервер берёт данные пользователя (например, id), создаёт JWT — payload с этими данными, подписывает токен своим секретным ключом (JWT_SECRET) и отдаёт этот токен клиенту (UI).
+// Сервер берёт данные пользователя (например, id), создаёт JWT — payload с этими данными, подписывает токен своим секретным ключом (JWT_SECRET) и отдаёт этот токен клиенту (UI).
 
 //Клиент (например, браузер) получает этот токен и обычно хранит его в localStorage или cookie.
 // Этот токен не меняется на клиенте — клиент просто хранит и отправляет его обратно серверу при каждом запросе.

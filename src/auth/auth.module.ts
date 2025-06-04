@@ -8,7 +8,8 @@ import { getJWTConfig } from 'src/config/jwt.config'
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports: [ // то что нужно для раб АУС модуля
+  imports: [
+    // то что нужно для раб АУС модуля
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: getJWTConfig,
