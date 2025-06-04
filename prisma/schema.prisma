@@ -7,72 +7,15 @@ datasource db {
   url      = env("POSTGRES_URI")
 }
 
-model Movie {
+model User {
   id String @id @default(uuid())
 
-  title       String
-  description String? //? необязательный парам
-  releaseYear Int
-  reting      Float    @default(0.0) //@default(0.0) дефолтное значение
-  isAvailable Boolean  @default(false) // ignore - поле в табл будет, но через Призму работать с ним не получится
-  genre       Genre    @default(COMEDY)
-  createdAt   DateTime @default(now()) @map("created_at") //  @map("created_at") то как будет в БД поле называться
-  updateAt    DateTime @updatedAt @map("updated_at") //@updatedAt спец декор для обновл строки
+  email    String @unique
+  password String
+  name     String
 
-  review Review[]
-  actor  Actor[]  @relation("movies_actors")
+  createdAt  DateTime @default(now()) @map("Created_at")
+  updateddAt DateTime @updatedAt @map("Updated_at")
 
-  poster   MoviePoster? @relation(fields: [posterId], references: [id])
-  posterId String?      @unique @map("poster_id")
-
-  @@index([releaseYear, title]) // index чтобы поиск в сущн  был по этому полю быстрее, за счет того что он сразу фильтрует по этим полям
-  @@map("movies") // @@map декор для назв самой таблицы
-}
-
-model MoviePoster {
-  id    String @id @default(uuid())
-  name  String
-  url   String
-  movie Movie? @relation // One to One
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("updated_at")
-
-  @@map("movie_posters")
-}
-
-model Review {
-  id     String  @id @default(uuid())
-  text   String
-  rating Decimal @default(0.0)
-
-  // Many to one
-  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade) // onDelete: Cascade если фильм удалится, то  и всве комменты к нему тоже
-  movieId String @map("movie_id")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("updated_at")
-
-  @@map("reviews")
-}
-
-model Actor {
-  id   String @id @default(uuid())
-  name String
-
-  Movies Movie[] @relation("movies_actors") // Many to many
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("updated_at")
-
-  @@map("actor")
-}
-
-enum Genre {
-  ACTION
-  COMEDY
-  DRAMA
-  HORROR
-
-  @@map("enum_geners")
+  @@map("users")
 }
