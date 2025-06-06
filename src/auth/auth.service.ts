@@ -106,6 +106,7 @@ export class AuthService {
 
     async logout(res: Response) {
         this.setCookie(res, 'LenaRefreshToken', new Date(0)) // new Date(0) значит просто удалили значение
+        return true
     }
 
     // рефрешТОкен присобачиваем в куку
