@@ -8,6 +8,11 @@ export async function getJWTConfig(
   return {
     secret: configService.getOrThrow<string>('JWT_SECRET'),
     signOptions: { algorithm: 'HS256' },
+    verifyOptions:{ // параметры проверки токена
+      algorithms:['HS256'],
+      ignoreExpiration:false // токен не может быть заэкспайреным
+
+    }
   }
 }
 // Сервер берёт данные пользователя (например, id), создаёт JWT — payload с этими данными, подписывает токен своим секретным ключом (JWT_SECRET) и отдаёт этот токен клиенту (UI).
