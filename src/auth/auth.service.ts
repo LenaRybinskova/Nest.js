@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { RegisterRequest } from 'src/auth/dto/registerRequest'
@@ -10,7 +11,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { JwtPayload } from 'src/auth/interfaces/jwt.interface'
 import { LoginRequest } from 'src/auth/dto/loginRequest'
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { isDev } from 'src/utils/is-dev.util'
 
 @Injectable()
@@ -79,6 +80,50 @@ export class AuthService {
     return this.auth(res, existUser.id)
   }
 
+  // тут токен проверяется, есть ли рфр токен и живой ли он, если да - то выдаются обновл токены
+  async refresh(req: Request, res: Response) {
+    const refreshToker = req.cookies['LenaRefreshToken']
+    if (!refreshToker) {
+      throw new UnauthorizedException('Нет refresh-токен')
+    }
+    const payload: JwtPayload = await this.jwtService.verifyAsync(refreshToker) // вытаск ИД из токена
+
+    if (!payload) {
+      throw new NotFoundException('Проблемы с верификацией токена')
+    }
+
+    if (payload) {
+      // ищем юзера по токену
+      const user = await this.prismaService.user.findUnique({
+        where: { id: payload.id },
+        select: { id: true },
+      })
+
+      if (!user) {
+        throw new NotFoundException(
+          'Проблемы с рефреш токенов, нет такого юзера',
+        )
+      }
+
+      return this.auth(res, user.id) // если юзер такой есть в БД, то цепл новый рефр токен в куку а аксессс в пейлод
+    }
+  }
+
+  async logout(res: Response) {
+    this.setCookie(res, 'LenaRefreshToken', new Date(0)) // new Date(0) значит просто удалили значение
+    return true
+  }
+
+  // ищем юзера в БД по Ид
+  async validate(id: string) {
+    const user = await this.prismaService.user.findUnique({ where: { id } }) // нашли юзера по ИД
+    if (!user) {
+      throw new NotFoundException('Юзер не найден')
+    }
+    return user
+  }
+
+  // рефрешТОкен присобачиваем в куку
   private auth(res: Response, id: string) {
     const { refreshToken, accessToken } = this.generateTokens(id)
     this.setCookie(
